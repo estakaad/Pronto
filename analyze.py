@@ -1,4 +1,5 @@
 from googletrans import Translator
+import preprocessing
 
 
 def ratioOfKnownWordsToAllLemmasInText(vocabulary, text):
@@ -11,6 +12,19 @@ def ratioOfKnownWordsToAllLemmasInText(vocabulary, text):
     ratio = knownWords / len(text) * 100
 
     return ratio
+
+
+def orderSentencesByComprehension(vocabulary, sentences):
+    sentencesWithComprehensionRatios = []
+
+    for sentence in sentences:
+        lemmatizedSentence = preprocessing.lemmatizeText(sentence)
+        ratio = ratioOfKnownWordsToAllLemmasInText(vocabulary, lemmatizedSentence)
+        sentencesWithComprehensionRatios.append([sentence, lemmatizedSentence, ratio])
+
+        sentencesWithComprehensionRatiosOrderedByAsc = sorted(sentencesWithComprehensionRatios, key=lambda x: float(x[2]))
+
+    return sentencesWithComprehensionRatiosOrderedByAsc
 
 
 def getUnKnownWords(vocabulary, text):

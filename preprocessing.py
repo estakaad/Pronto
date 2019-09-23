@@ -1,11 +1,17 @@
 import treetaggerwrapper
 import re
+from nltk import tokenize
 
 
 def fileToString(fileName):
     with open(fileName, 'r', encoding="utf-8") as file:
         stringOfText = file.read().replace('\n', ' ')
     return stringOfText
+
+
+def textToSentences(text):
+    sentences = tokenize.sent_tokenize(text)
+    return sentences
 
 
 def lemmatizeText(input):

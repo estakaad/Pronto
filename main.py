@@ -6,18 +6,13 @@ textFileName = 'story.txt'
 vocabularyFileName = 'vocabulary.txt'
 
 story = preprocessing.fileToString(textFileName)
-storyList = preprocessing.lemmatizeText(story)
+sentences = preprocessing.textToSentences(story)
 
 words = preprocessing.fileToString(vocabularyFileName)
 wordList = preprocessing.lemmatizeText(words)
 wordList = preprocessing.listOfUniqueLemmas(wordList)
 
-ratioOfKnownToAllLemmas = analyze.ratioOfKnownWordsToAllLemmasInText(wordList, storyList)
-print(str(ratioOfKnownToAllLemmas))
+sentencesWithRatios = analyze.orderSentencesByComprehension(wordList, sentences)
 
-unknownWords = analyze.getUnKnownWords(wordList, storyList)
-unknownWords = preprocessing.listOfUniqueLemmas(unknownWords)
-
-print(story)
-
-analyze.translateWords(unknownWords)
+for sentence in sentencesWithRatios:
+    print(str(sentence[2]) + ' - ' + sentence[0])
