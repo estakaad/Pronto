@@ -8,11 +8,14 @@ vocabularyFileName = 'vocabulary.txt'
 story = preprocessing.fileToString(textFileName)
 sentences = preprocessing.textToSentences(story)
 
-words = preprocessing.fileToString(vocabularyFileName)
-wordList = preprocessing.lemmatizeText(words)
-wordList = preprocessing.listOfUniqueLemmas(wordList)
+vocabulary = preprocessing.fileToString(vocabularyFileName)
+taggedVocabulary = preprocessing.tagText(vocabulary)
+lemmatizedVocabulary = set(preprocessing.lemmatizeText(taggedVocabulary))
 
-sentencesWithRatios = analyze.orderSentencesByComprehension(wordList, sentences)
+taggedText = preprocessing.tagText(sentences)
 
-for sentence in sentencesWithRatios:
-    print(str(sentence[2]) + ' - ' + sentence[0])
+newTags = preprocessing.tagKnownLemmas(lemmatizedVocabulary, taggedText)
+
+for tag in newTags:
+    if getattr(tag, 'known') == False:
+        print(getattr(tag, 'lemma') + ' - ' + str(getattr(tag, 'known')) + '\n')
