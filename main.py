@@ -5,17 +5,17 @@ import analyze
 textFileName = 'story.txt'
 vocabularyFileName = 'vocabulary.txt'
 
-story = preprocessing.fileToString(textFileName)
-sentences = preprocessing.textToSentences(story)
+story = preprocessing.file_to_string(textFileName)
+sentences = preprocessing.text_to_sentences(story)
 
-vocabulary = preprocessing.fileToString(vocabularyFileName)
-taggedVocabulary = preprocessing.tagText(vocabulary)
-lemmatizedVocabulary = set(preprocessing.lemmatizeText(taggedVocabulary))
+vocabulary = preprocessing.file_to_string(vocabularyFileName)
+taggedVocabulary = preprocessing.tag_text(vocabulary)
+lemmatizedVocabulary = set(preprocessing.lemmatize_text(taggedVocabulary))
 
-taggedText = preprocessing.tagText(sentences)
+taggedText = preprocessing.tag_text(sentences)
 
-newTags = preprocessing.tagKnownLemmas(lemmatizedVocabulary, taggedText)
+newTags = analyze.tag_known_lemmas(lemmatizedVocabulary, taggedText)
 
 for tag in newTags:
     if getattr(tag, 'known') == False:
-        print(getattr(tag, 'lemma') + ' - ' + str(getattr(tag, 'known')) + '\n')
+        print(getattr(tag, 'lemma') + ' - ' + str(getattr(tag, 'known')))

@@ -1,8 +1,38 @@
 from googletrans import Translator
 import preprocessing
+import re
 
 
-def ratioOfKnownWordsToAllLemmasInText(vocabulary, text):
+class Word:
+    def __init__(self, word, pos, lemma, known):
+        self.word = word
+        self.pos = pos
+        self.lemma = lemma
+        self.known = known
+
+
+#Input is a list of lemmas as vocabulary and a list of Tag objects. Returns a list of Word objects.
+#Word objects have an attribute 'known' which indicates whether the word is in the vocabulary.
+def tag_known_lemmas(vocabulary, tags):
+
+    newTags = []
+
+    for tag in tags:
+        z = re.match("[^\w]", getattr(tag, 'lemma'))
+        if z:
+            word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
+            newTags.append(word)
+        else:
+            if getattr(tag, 'lemma') in vocabulary:
+                word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
+            else:
+                word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), False)
+            newTags.append(word)
+
+    return newTags
+
+
+def ratio_of_known_words_to_all_words_in_text(vocabulary, text):
     knownWords = 0
 
     for word in text:
@@ -14,7 +44,7 @@ def ratioOfKnownWordsToAllLemmasInText(vocabulary, text):
     return ratio
 
 
-def orderSentencesByComprehension(vocabulary, sentences):
+def order_sentences_by_comprehension(vocabulary, sentences):
     sentencesWithComprehensionRatios = []
 
     for sentence in sentences:
@@ -27,19 +57,7 @@ def orderSentencesByComprehension(vocabulary, sentences):
     return sentencesWithComprehensionRatiosOrderedByAsc
 
 
-def getUnKnownWords(vocabulary, text):
-    unknownWords = []
-
-    for word in text:
-        if word in vocabulary:
-            continue
-        else:
-            unknownWords.append(word)
-
-    return unknownWords
-
-
-def translateWords(italianWords):
+def translate_words(italianWords):
     translator = Translator()
     translations = translator.translate(italianWords)
 
