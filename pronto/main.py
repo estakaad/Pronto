@@ -6,8 +6,8 @@ from colorama import Fore, Back, Style
 colorama.init(autoreset=True)
 
 
-text_file_name = 'story.txt'
-vocabulary_file_name = 'vocabulary.txt'
+text_file_name = '../data/story.txt'
+vocabulary_file_name = '../data/vocabulary.txt'
 
 story = preprocessing.file_to_string(text_file_name)
 sentences = preprocessing.text_to_sentences(story)
