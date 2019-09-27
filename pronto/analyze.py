@@ -1,7 +1,19 @@
 from googletrans import Translator
 import preprocessing
 import re
+from nltk.corpus import wordnet as wn
+#
+#nltk.download('wordnet')
+#nltk.download('omw')
 
+#cane_lemmas = wn.lemmas("cane", lang="ita")
+
+#print(cane_lemmas)
+
+#hypernyms = cane_lemmas[0].synset().hypernyms()
+#print(hypernyms)
+
+#print(hypernyms[1].lemmas(lang='ita'))
 
 class Word:
     def __init__(self, word, pos, lemma, known):
@@ -13,7 +25,7 @@ class Word:
 
 #Input is a list of lemmas as vocabulary and a list of Tag objects. Returns a list of Word objects.
 #Word objects have an attribute 'known' which indicates whether the word is in the vocabulary.
-def tag_known_lemmas(vocabulary, tags):
+def tag_known_lemmas(vocabulary, stop_words, tags):
 
     new_tags = []
 
@@ -24,6 +36,8 @@ def tag_known_lemmas(vocabulary, tags):
             new_tags.append(word)
         else:
             if getattr(tag, 'lemma') in vocabulary:
+                word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
+            elif getattr(tag, 'lemma') in stop_words:
                 word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
             else:
                 word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), False)
@@ -59,10 +73,18 @@ def order_sentences_by_comprehension(vocabulary, sentences):
 
 def translate_words(italian_words):
     translator = Translator()
-    translations = translator.translate(italian_words)
+    italian_lemmas = []
 
-    for translation in translations:
-        if translation.origin == translation.text:
-            print(translation.origin + ' -> ?')
-        else:
-            print(translation.origin + ' -> ' + translation.text)
+    for italian_word in italian_words:
+        if getattr(italian_word, 'known') is False:
+            word = getattr(italian_word, 'lemma')
+            print(word)
+            italian_lemmas.append(word)
+
+    translations = translator.translate(italian_lemmas)
+
+    #for translation in translations:
+    ##   if translation.origin == translation.text:
+     #       print(translation.origin + ' -> ?')
+     #  else:
+     #      print(translation.origin + ' -> ' + translation.text)

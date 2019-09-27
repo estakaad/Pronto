@@ -1,13 +1,10 @@
 import preprocessing
 import analyze
-import colorama
-import re
-from colorama import Fore, Back, Style
-colorama.init(autoreset=True)
-
+import display
 
 text_file_name = '../data/story.txt'
 vocabulary_file_name = '../data/vocabulary.txt'
+stop_words = ['Momo']
 
 story = preprocessing.file_to_string(text_file_name)
 sentences = preprocessing.text_to_sentences(story)
@@ -18,10 +15,8 @@ lemmatized_vocabulary = set(preprocessing.lemmatize_text(tagged_vocabulary))
 
 tagged_text = preprocessing.tag_text(sentences)
 
-new_tags = analyze.tag_known_lemmas(lemmatized_vocabulary, tagged_text)
+new_tags = analyze.tag_known_lemmas(lemmatized_vocabulary, stop_words, tagged_text)
 
-for tag in new_tags:
-    if getattr(tag, 'known') is False:
-        print(Back.RED + getattr(tag, 'word'), end=" ")
-    else:
-        print(getattr(tag, 'word'), end=" ")
+display.mark_unknown_words_red(new_tags)
+print('\n')
+display.print_parts_of_speech(new_tags)

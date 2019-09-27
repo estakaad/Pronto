@@ -35,6 +35,3 @@ def lemmatize_text(tags):
             all_lemmas.append(getattr(tag, 'lemma'))
 
     return all_lemmas
-
-
-#Add stopwords...
