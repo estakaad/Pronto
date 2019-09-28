@@ -4,19 +4,20 @@ import display
 
 text_file_name = '../data/story.txt'
 vocabulary_file_name = '../data/vocabulary.txt'
-stop_words = ['Momo']
+stop_words = ['Momo', 'essere|stare']
 
 story = preprocessing.file_to_string(text_file_name)
 sentences = preprocessing.text_to_sentences(story)
 
 vocabulary = preprocessing.file_to_string(vocabulary_file_name)
-tagged_vocabulary = preprocessing.tag_text(vocabulary)
-lemmatized_vocabulary = set(preprocessing.lemmatize_text(tagged_vocabulary))
 
-tagged_text = preprocessing.tag_text(sentences)
-
-new_tags = analyze.tag_known_lemmas(lemmatized_vocabulary, stop_words, tagged_text)
-
-display.mark_unknown_words_red(new_tags)
-print('\n')
-display.print_parts_of_speech(new_tags)
+for sentence in sentences:
+    tagged_sentence = preprocessing.tag_text(sentence)
+    word_objects = analyze.tag_known_lemmas(vocabulary, stop_words, tagged_sentence)
+    print(sentence + '\n' + str(analyze.ratio_of_known_words_to_all_words_in_text(word_objects)) + '% of the sentence should be comprehensible')
+    print('New words:')
+    for word in word_objects:
+        if word.known is False:
+            print(word.lemma)
+    #analyze.translate_lemmas(unknowns)
+    print('\n')

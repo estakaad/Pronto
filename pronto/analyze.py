@@ -1,19 +1,7 @@
 from googletrans import Translator
 import preprocessing
 import re
-from nltk.corpus import wordnet as wn
-#
-#nltk.download('wordnet')
-#nltk.download('omw')
 
-#cane_lemmas = wn.lemmas("cane", lang="ita")
-
-#print(cane_lemmas)
-
-#hypernyms = cane_lemmas[0].synset().hypernyms()
-#print(hypernyms)
-
-#print(hypernyms[1].lemmas(lang='ita'))
 
 class Word:
     def __init__(self, word, pos, lemma, known):
@@ -26,65 +14,71 @@ class Word:
 #Input is a list of lemmas as vocabulary and a list of Tag objects. Returns a list of Word objects.
 #Word objects have an attribute 'known' which indicates whether the word is in the vocabulary.
 def tag_known_lemmas(vocabulary, stop_words, tags):
-
+    #print('Creating Word objects from Tag objects. Attributes of Word objects: word, pos, lemma, known. Stop words and punctuation is considered as known vocabulary.')
     new_tags = []
 
     for tag in tags:
-        z = re.match("[^\w]", getattr(tag, 'lemma'))
+        z = re.match("[^\w]", tag.lemma)
         if z:
-            word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
+            word = Word(tag.word, tag.pos, tag.lemma, True)
             new_tags.append(word)
         else:
-            if getattr(tag, 'lemma') in vocabulary:
-                word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
-            elif getattr(tag, 'lemma') in stop_words:
-                word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), True)
+            if tag.lemma in vocabulary:
+                word = Word(tag.word, tag.pos, tag.lemma, True)
+            elif tag.lemma in stop_words:
+                word = Word(tag.word, tag.pos, tag.lemma, True)
             else:
-                word = Word(getattr(tag, 'word'), getattr(tag, 'pos'), getattr(tag, 'lemma'), False)
+                word = Word(tag.word, tag.pos, tag.lemma, False)
             new_tags.append(word)
 
     return new_tags
 
 
-def ratio_of_known_words_to_all_words_in_text(vocabulary, text):
-    known_words = 0
+#Returns a dictionary where keys are parts of speech and values are lists of lemmas that belong to the POS.
+## Includes only unknown words
+def get_pos(words):
+    #print('Creating a dictionary of nouns, adjectives, verbs and adverbs...')
+    dict_pos = {}
+    dict_pos['Nouns'] = []
+    dict_pos['Adjectives'] = []
+    dict_pos['Verbs'] = []
+    dict_pos['Adverbs'] = []
 
-    for word in text:
-        if word in vocabulary:
-            known_words += 1
+    for word in words:
+        if word.known is False:
+            if word.pos == 'NOM':
+                dict_pos['Nouns'].append(word.lemma)
+            elif word.pos == 'ADJ':
+                dict_pos['Adjectives'].append(word.lemma)
+            elif word.pos.startswith('VER'):
+                dict_pos['Verbs'].append(word.lemma)
+            elif word.pos == 'ADV':
+                dict_pos['Adverbs'].append(word.lemma)
+            else:
+                continue
 
-    ratio = known_words / len(text) * 100
+    return dict_pos
+
+
+def ratio_of_known_words_to_all_words_in_text(words):
+    #print('Calculating ratio of known lemmas to all lemmas (excluding punctuation)...')
+    known_count = sum(w.known is True for w in words)
+    punct_count = sum(re.match("[^\w]", w.lemma) is True for w in words)
+    ratio = (known_count - punct_count) / len(words) * 100
 
     return ratio
 
 
-def order_sentences_by_comprehension(vocabulary, sentences):
-    sentences_with_comprehension_ratios = []
-
-    for sentence in sentences:
-        lemmatized_sentence = preprocessing.lemmatizeText(sentence)
-        ratio = ratio_of_known_words_to_all_words_in_text(vocabulary, lemmatized_sentence)
-        sentences_with_comprehension_ratios.append([sentence, lemmatized_sentence, ratio])
-
-        sentencesWithComprehensionRatiosOrderedByAsc = sorted(sentences_with_comprehension_ratios, key=lambda x: float(x[2]))
-
-    return sentencesWithComprehensionRatiosOrderedByAsc
-
-
-def translate_words(italian_words):
+#Can't test because temporarily blocked by Google
+def translate_lemmas(lemmas_in_italian):
     translator = Translator()
-    italian_lemmas = []
 
-    for italian_word in italian_words:
-        if getattr(italian_word, 'known') is False:
-            word = getattr(italian_word, 'lemma')
-            print(word)
-            italian_lemmas.append(word)
+    translations = translator.translate(lemmas_in_italian)
 
-    translations = translator.translate(italian_lemmas)
+    for translation in translations:
+        if translation.origin == translation.text:
+            print(translation.origin + '-> ?')
+        else:
+            print(translation.origin + ' -> ' + translation.text)
 
-    #for translation in translations:
-    ##   if translation.origin == translation.text:
-     #       print(translation.origin + ' -> ?')
-     #  else:
-     #      print(translation.origin + ' -> ' + translation.text)
+    return translation

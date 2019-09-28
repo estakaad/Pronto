@@ -36,4 +36,3 @@ def print_parts_of_speech(words):
                 continue
 
     print(dict_pos)
-    #print(*set(pos), sep=' ')
