@@ -1,6 +1,7 @@
 import colorama
 from colorama import Fore, Back, Style
 import re
+import analyze
 
 colorama.init(autoreset=True)
 
@@ -47,28 +48,28 @@ def print_new_words(words):
     if len(parts_of_speech.get('Nouns')) == 0:
         print('-')
     else:
-        for noun in parts_of_speech.get('Nouns'):
+        for noun in set(parts_of_speech.get('Nouns')):
             print(noun)
 
     print('\nNew verbs (' + str(len(parts_of_speech.get('Verbs'))) + ')\n')
     if len(parts_of_speech.get('Verbs')) == 0:
         print('-')
     else:
-        for verb in parts_of_speech.get('Verbs'):
+        for verb in set(parts_of_speech.get('Verbs')):
             print(verb)
 
     print('\nNew adjectives (' + str(len(parts_of_speech.get('Adjectives'))) + ')\n')
     if len(parts_of_speech.get('Adjectives')) == 0:
         print('-')
     else:
-        for adj in parts_of_speech.get('Adjectives'):
+        for adj in set(parts_of_speech.get('Adjectives')):
             print(adj)
 
     print('\nNew adverbs (' + str(len(parts_of_speech.get('Adverbs'))) + ')\n')
     if len(parts_of_speech.get('Adverbs')) == 0:
         print('-')
     else:
-        for adv in parts_of_speech.get('Adverbs'):
+        for adv in set(parts_of_speech.get('Adverbs')):
             print(adv)
 
 

@@ -1,7 +1,7 @@
 import preprocessing
 import analyze
 import display
-
+from nltk.corpus import wordnet
 
 text_file_name = '../data/story.txt'
 vocabulary_file_name = '../data/vocabulary.txt'
@@ -15,9 +15,8 @@ tagged_sentence = preprocessing.tag_text(sentences)
 word_objects = analyze.tag_known_lemmas(vocabulary, stop_words, tagged_sentence)
 print('\n')
 display.print_unknown_words_red(word_objects)
-
-ratio = analyze.ratio_of_known_words_to_all_words_in_text(word_objects)
 print('\n')
+ratio = analyze.ratio_of_known_words_to_all_words_in_text(word_objects)
 print('%.2f' % ratio + '% of the text should be comprehensible.\n')
 
 display.print_new_words(word_objects)

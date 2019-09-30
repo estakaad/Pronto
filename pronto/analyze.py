@@ -1,5 +1,6 @@
 from googletrans import Translator
 import re
+from nltk.corpus import wordnet
 
 
 class Word:
@@ -62,7 +63,9 @@ def get_pos(words):
 def ratio_of_known_words_to_all_words_in_text(words):
     #print('Calculating ratio of known lemmas to all lemmas (excluding punctuation)...')
     known_count = sum(w.known is True for w in words)
+    print('Number of already learnt lemmas: ' + str(known_count))
     punct_count = sum(re.match('[^\w]', w.lemma) is True for w in words)
+    print('Number of words in total: ' + str(len(words)))
     ratio = (known_count - punct_count) / len(words) * 100
 
     return ratio
@@ -81,3 +84,11 @@ def translate_lemmas(lemmas_in_italian):
             print(translation.origin + ' -> ' + translation.text)
 
     return translation
+
+
+#Get synonyms from WordNet. Doesn't handle any exceptions though.
+def get_synonyms(lemma):
+    lemma_lemmas = wordnet.lemmas(lemma, lang='ita')
+    hypernyms = lemma_lemmas[0].synset().hypernyms()
+
+    return hypernyms[0].lemmas(lang='ita')
