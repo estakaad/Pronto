@@ -15,7 +15,7 @@ def mark_unknown_words_red(words):
 
 
 #Return dictionary of unknown nouns, verbs, adjectives, adverbs
-def print_parts_of_speech(words):
+def get_parts_of_speech_of_new_words(words):
 
     dict_pos = {}
     dict_pos['Nouns'] = []
@@ -36,7 +36,40 @@ def print_parts_of_speech(words):
             else:
                 continue
 
-    print(dict_pos)
+    return dict_pos
+
+
+#Print new words.
+def print_new_words(words):
+    parts_of_speech = get_parts_of_speech_of_new_words(words)
+
+    print('New nouns (' + str(len(parts_of_speech.get('Nouns'))) + ')\n')
+    if len(parts_of_speech.get('Nouns')) == 0:
+        print('-')
+    else:
+        for noun in parts_of_speech.get('Nouns'):
+            print(noun)
+
+    print('\nNew verbs (' + str(len(parts_of_speech.get('Verbs'))) + ')\n')
+    if len(parts_of_speech.get('Verbs')) == 0:
+        print('-')
+    else:
+        for verb in parts_of_speech.get('Verbs'):
+            print(verb)
+
+    print('\nNew adjectives (' + str(len(parts_of_speech.get('Adjectives'))) + ')\n')
+    if len(parts_of_speech.get('Adjectives')) == 0:
+        print('-')
+    else:
+        for adj in parts_of_speech.get('Adjectives'):
+            print(adj)
+
+    print('\nNew adverbs (' + str(len(parts_of_speech.get('Adverbs'))) + ')\n')
+    if len(parts_of_speech.get('Adverbs')) == 0:
+        print('-')
+    else:
+        for adv in parts_of_speech.get('Adverbs'):
+            print(adv)
 
 
 #Print attributes of Word objects as sentences.
