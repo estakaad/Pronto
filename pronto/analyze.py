@@ -1,5 +1,4 @@
 from googletrans import Translator
-import preprocessing
 import re
 
 
@@ -13,13 +12,13 @@ class Word:
 
 #Input is a list of lemmas as vocabulary and a list of Tag objects. Returns a list of Word objects.
 #Word objects have an attribute 'known' which indicates whether the word is in the vocabulary.
+#Punctuation is considered as known. Proper names are considered known.
 def tag_known_lemmas(vocabulary, stop_words, tags):
-    #print('Creating Word objects from Tag objects. Attributes of Word objects: word, pos, lemma, known. Stop words and punctuation is considered as known vocabulary.')
     new_tags = []
 
     for tag in tags:
-        z = re.match("[^\w]", tag.lemma)
-        if z:
+        punctuation = re.match('[^\w]', tag.lemma)
+        if punctuation:
             word = Word(tag.word, tag.pos, tag.lemma, True)
             new_tags.append(word)
         else:
@@ -63,7 +62,7 @@ def get_pos(words):
 def ratio_of_known_words_to_all_words_in_text(words):
     #print('Calculating ratio of known lemmas to all lemmas (excluding punctuation)...')
     known_count = sum(w.known is True for w in words)
-    punct_count = sum(re.match("[^\w]", w.lemma) is True for w in words)
+    punct_count = sum(re.match('[^\w]', w.lemma) is True for w in words)
     ratio = (known_count - punct_count) / len(words) * 100
 
     return ratio
