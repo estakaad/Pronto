@@ -49,28 +49,28 @@ def print_new_words(words):
         print('-')
     else:
         for noun in set(parts_of_speech.get('Nouns')):
-            print(noun)
+            print(noun + ' - ' + analyze.get_synonyms(noun, 'noun'))
 
     print('\nNew verbs (' + str(len(parts_of_speech.get('Verbs'))) + ')\n')
     if len(parts_of_speech.get('Verbs')) == 0:
         print('-')
     else:
         for verb in set(parts_of_speech.get('Verbs')):
-            print(verb)
+            print(verb + ' - ' + analyze.get_synonyms(verb, 'verb'))
 
     print('\nNew adjectives (' + str(len(parts_of_speech.get('Adjectives'))) + ')\n')
     if len(parts_of_speech.get('Adjectives')) == 0:
         print('-')
     else:
         for adj in set(parts_of_speech.get('Adjectives')):
-            print(adj)
+            print(adj + ' - ' + analyze.get_synonyms(adj, 'adjective'))
 
     print('\nNew adverbs (' + str(len(parts_of_speech.get('Adverbs'))) + ')\n')
     if len(parts_of_speech.get('Adverbs')) == 0:
         print('-')
     else:
         for adv in set(parts_of_speech.get('Adverbs')):
-            print(adv)
+            print(adv + ' - ' + analyze.get_synonyms(adv, 'adverb'))
 
 
 #Print attributes of Word objects as sentences.

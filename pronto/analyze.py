@@ -86,9 +86,31 @@ def translate_lemmas(lemmas_in_italian):
     return translation
 
 
-#Get synonyms from WordNet. Doesn't handle any exceptions though.
-def get_synonyms(lemma):
-    lemma_lemmas = wordnet.lemmas(lemma, lang='ita')
-    hypernyms = lemma_lemmas[0].synset().hypernyms()
+#Get first synonym from WordNet.
+def get_synonyms(lemma, pos):
+    if pos == 'noun':
+        if not wordnet.synsets(lemma, pos=wordnet.NOUN, lang='ita'):
+            synonym = '-'
+        else:
+            synonym = wordnet.synsets(lemma, pos=wordnet.NOUN, lang='ita')[0]
+            synonym = synonym.name().split('.')[0]
+    elif pos == 'adjective':
+        if not wordnet.synsets(lemma, pos=wordnet.ADJ, lang='ita'):
+            synonym = '-'
+        else:
+            synonym = wordnet.synsets(lemma, pos=wordnet.ADJ, lang='ita')[0]
+            synonym = synonym.name().split('.')[0]
+    elif pos == 'adverb':
+        if not wordnet.synsets(lemma, pos=wordnet.ADV, lang='ita'):
+            synonym = '-'
+        else:
+            synonym = wordnet.synsets(lemma, pos=wordnet.ADV, lang='ita')[0]
+            synonym = synonym.name().split('.')[0]
+    else:
+        if not wordnet.synsets(lemma, lang='ita'):
+            synonym = '-'
+        else:
+            synonym = wordnet.synsets(lemma, lang='ita')[0]
+            synonym = synonym.name().split('.')[0]
 
-    return hypernyms[0].lemmas(lang='ita')
+    return synonym
