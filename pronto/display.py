@@ -40,8 +40,8 @@ def get_parts_of_speech_of_new_words(words):
     return dict_pos
 
 
-#Print new words.
-def print_new_words(words):
+#Print new words and their synonyms.
+def print_new_words_with_synonyms(words):
     parts_of_speech = get_parts_of_speech_of_new_words(words)
 
     print('New nouns (' + str(len(parts_of_speech.get('Nouns'))) + ')\n')
@@ -71,6 +71,39 @@ def print_new_words(words):
     else:
         for adv in set(parts_of_speech.get('Adverbs')):
             print(adv + ' - ' + analyze.get_synonyms(adv, 'adverb'))
+
+
+#Print new words and their translations.
+def print_new_words_with_translations(words):
+    parts_of_speech = get_parts_of_speech_of_new_words(words)
+
+    print('New nouns (' + str(len(parts_of_speech.get('Nouns'))) + ')\n')
+    if len(parts_of_speech.get('Nouns')) == 0:
+        print('-')
+    else:
+        for noun in set(parts_of_speech.get('Nouns')):
+            print(noun + ' - ' + analyze.translate_lemma(noun))
+
+    print('\nNew verbs (' + str(len(parts_of_speech.get('Verbs'))) + ')\n')
+    if len(parts_of_speech.get('Verbs')) == 0:
+        print('-')
+    else:
+        for verb in set(parts_of_speech.get('Verbs')):
+            print(verb + ' - ' + analyze.translate_lemma(verb))
+
+    print('\nNew adjectives (' + str(len(parts_of_speech.get('Adjectives'))) + ')\n')
+    if len(parts_of_speech.get('Adjectives')) == 0:
+        print('-')
+    else:
+        for adj in set(parts_of_speech.get('Adjectives')):
+            print(adj + ' - ' + analyze.translate_lemma(adj))
+
+    print('\nNew adverbs (' + str(len(parts_of_speech.get('Adverbs'))) + ')\n')
+    if len(parts_of_speech.get('Adverbs')) == 0:
+        print('-')
+    else:
+        for adv in set(parts_of_speech.get('Adverbs')):
+            print(adv + ' - ' + analyze.translate_lemma(adv))
 
 
 #Print attributes of Word objects as sentences.

@@ -71,17 +71,16 @@ def ratio_of_known_words_to_all_words_in_text(words):
     return ratio
 
 
-#Can't test because temporarily blocked by Google
-def translate_lemmas(lemmas_in_italian):
+#Works but too many requests and you're blocked by Google.
+def translate_lemma(lemma_in_italian):
     translator = Translator()
 
-    translations = translator.translate(lemmas_in_italian)
+    translation = translator.translate(lemma_in_italian)
 
-    for translation in translations:
-        if translation.origin == translation.text:
-            print(translation.origin + '-> ?')
-        else:
-            print(translation.origin + ' -> ' + translation.text)
+    if translation.origin == translation.text:
+        translation = '?'
+    else:
+        translation = translation.text
 
     return translation
 

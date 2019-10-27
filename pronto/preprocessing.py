@@ -4,14 +4,14 @@ from nltk import tokenize
 
 
 def file_to_string(file_name):
-    print('Reading from file ' + file_name + '...')
+    #print('Reading from file ' + file_name + '...')
     with open(file_name, 'r', encoding="utf-8") as file:
         string_of_text = file.read().replace('\n', ' ')
     return string_of_text
 
 #Returns a list of sentences
 def text_to_sentences(text):
-    print('Splitting text to sentences...')
+    #print('Splitting text to sentences...')
     sentences = tokenize.sent_tokenize(text)
     return sentences
 
