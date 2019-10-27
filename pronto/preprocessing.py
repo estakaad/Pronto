@@ -5,9 +5,17 @@ from nltk import tokenize
 
 def file_to_string(file_name):
     #print('Reading from file ' + file_name + '...')
-    with open(file_name, 'r', encoding="utf-8") as file:
+    with open(file_name, 'r', encoding='utf-8') as file:
         string_of_text = file.read().replace('\n', ' ')
     return string_of_text
+
+
+#Append a known word to the vocabulary file.
+def add_lemma_to_vocabulary(lemma, vocabulary_file):
+    with open(vocabulary_file, 'a', encoding='utf-8') as file:
+        file.write('\n'+lemma)
+    return file
+
 
 #Returns a list of sentences
 def text_to_sentences(text):
